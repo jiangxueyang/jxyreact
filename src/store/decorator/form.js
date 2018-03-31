@@ -47,7 +47,7 @@ export default function (target) {
         }
     }
     
-    target.prototype.setForm = action(function (name, formObj, isXss = true) {
+    target.prototype.setForm = action(function (name, formObj) {
         const form = this[`${name}Form`]
         let rules = this[`${name}Rules`]
         const fields = this[`${name}FormFields`]
@@ -63,7 +63,7 @@ export default function (target) {
         Object.keys(formObj).forEach((key) => {
             let tmpValue = formObj[key]
             if (form && typeof form[key] !== 'undefined') {
-                form[key] = (isXss && typeof tmpValue === 'string') ? xss.process(tmpValue) : tmpValue
+                form[key] = (typeof tmpValue === 'string' && key !== 'content') ? xss.process(tmpValue) : tmpValue
             }
             if (rules && rules[key] && errs && typeof errs[key] !== 'undefined') {
                 errs[key] = Validator.check(tmpValue, rules[key])
