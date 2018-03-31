@@ -1,0 +1,28 @@
+@import "../../theme";
+
+#edit{
+  .ant-row{
+    margin-bottom:20px;
+  }
+
+  .brief{
+    height:100px;
+  }
+  .blogContent{
+    height:500px;
+  }
+  .required{
+    &:before{
+      content:'*';
+      display: inline-block;
+      margin-right:5px;
+      color:@primary-color
+    }
+  }
+  .error{
+    color:@primary-color
+  }
+  .ant-radio-group{
+    display: block;
+  }
+}
