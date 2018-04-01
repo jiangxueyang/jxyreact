@@ -38,11 +38,11 @@ module.exports = function override (config, env) {
             }),
             new ssh({
                 port: '22',
-                host: '47.88.169.157',
+                host: '0.0.0.0',
                 username: 'root',
-                password: 'Aliyuniaipiu123',
+                password: '123456',
                 from: `build`,
-                to: `/home/html/react-oa`
+                to: `/data/html/oa`
             })
         ]
         config.plugins = config.plugins.concat(plugins)
