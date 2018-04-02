@@ -1,13 +1,14 @@
 class Validator {
     constructor () {
         this.regs = {
-            name: /^[a-zA-Z0-9\u4e00-\u9fa5]{6,16}$/,
+            name: /^[a-zA-Z0-9\-\u4e00-\u9fa5]{6,16}$/,
             phone: /(13\d|14[57]|15[^4,\D]|17[13678]|18\d)\d{8}$|170[0589]\d{7}$/,
             mail: /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/,
             password: /[\w\d~'!@#￥$%^&*|{}\][)(-?"+_=:`]{6,32}/,
             captcha: /[\d]{6}/,
             imgCaptcha: /[\d\w]{4}/,
-            noteName:/^[a-zA-Z0-9\u4e00-\u9fa5]{2,16}$/
+            noteName:/^[a-zA-Z0-9\-\u4e00-\u9fa5]{2,16}$/,
+            url:/^((http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)$/
         }
         this.errMsg = {
             required: '{name}不能为空',
@@ -19,14 +20,16 @@ class Validator {
             phone: '手机 格式不正确',
             mail: '邮箱 格式不正确',
             noteOrTag:'{name}格式不正确',
-            tagIdNotEmpty:'标签不能为空'
+            tagIdNotEmpty:'标签不能为空',
+            url:'链接格式不正确'
         }
         this.rules = {
             required (value) {
                 return ! (value === null || value === undefined || value === '')
             },
+            
             tagIdNotEmpty (value){
-                return value.length >0
+                return value.length > 0
             },
             noteOrTag (value){
                 const isNote = this.regs.noteName.test(value)
@@ -58,6 +61,9 @@ class Validator {
             },
             password (value) {
                 return this.regs.password.test(value)
+            },
+            url(value){
+                return this.regs.url.test(value)
             }
         }
     }
