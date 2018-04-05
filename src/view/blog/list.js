@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {withRouter, Link} from 'react-router-dom'
 import {inject, observer} from 'mobx-react'
 import {Table, Pagination, message} from 'antd';
@@ -9,8 +9,13 @@ class BlogList extends Component {
         {title: 'id', dataIndex: 'id', width: '50px'},
         {
             title: '标题', dataIndex: 'title', render: (text, record) => {
+            let {type, url, id} = record
+            type = Number(type)
             return (
-                <Link to={`/blog/detail/${record.id}`}>{text}</Link>
+                <Fragment>
+                    {type === 0 && <Link to={`/blog/detail/${id}`}>{text}</Link>}
+                    {type === 1 && <a href={url} target='_blank'>{text}</a>}
+                </Fragment>
             )
         }
         },
@@ -107,7 +112,7 @@ class BlogList extends Component {
     
     render () {
         let {Blog} = this.props, {note_id, tag_id} = this
-        let {allBlogInfo, noteForm,tagForm,blogInfoByNote, blogInfoByTag} = Blog
+        let {allBlogInfo, noteForm, tagForm, blogInfoByNote, blogInfoByTag} = Blog
         let info = {}
         if (tag_id) {
             info = blogInfoByTag
@@ -124,7 +129,8 @@ class BlogList extends Component {
                 <div className='record container'>
                     {note_id && `笔记本${noteForm.name}`}
                     {tag_id && `标签${tagForm.name}`}
-                    共有{total}篇文章</div>
+                    共有{total}篇文章
+                </div>
                 <Table columns={this.columns} dataSource={data} pagination={false} loading={Blog.loading}></Table>
                 <Pagination showQuickJumper defaultCurrent={this.pageNum} defaultPageSize={pageSize}
                             total={total} onChange={this.changePage}/>

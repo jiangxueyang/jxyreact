@@ -37,17 +37,20 @@ class BlogStore {
         create_time: moment(),
         note_id: '',
         publish: 0,
-        origin_tag_id: []
+        type:0,
+        origin_tag_id: [],
+        url:'',
         
     }
-    @observable blogEditErrs = {title: '', brief: '', tag_id: '', content: '', create_time: '', note_id: ''}
+    @observable blogEditErrs = {title: '', brief: '', tag_id: '', content: '', create_time: '', note_id: '',url:''}
     @observable blogEditRules = {
         title: {rules: 'required', aliasName: '标题'},
         brief: {rules: 'required', aliasName: '简介'},
-        content: {rules: 'required', aliasName: '内容'},
         note_id: {rules: 'required', aliasName: '笔记本'},
         tag_id: {rules: 'tagIdNotEmpty', aliasName: '标签'},
-        publish: {rule: 'required', aliasName: '是否发布'}
+        url: {rules: 'url', aliasName: '链接'},
+        publish: {rule: 'required', aliasName: '是否发布'},
+        type: {rule: 'required', aliasName: '博客类型'}
     }
     @observable blogEditStatus = {submit: false, loading: false}
     
@@ -123,7 +126,9 @@ class BlogStore {
             content: '',
             create_time: moment(),
             note_id: '',
-            publish: 0
+            publish: 0,
+            type:0,
+            url:''
         }
         this.blogEditStatus = {submit: false, loading: false}
     }
@@ -139,10 +144,10 @@ class BlogStore {
     async addBlog (id) {
         let {blogEditForm, blogEditStatus: status} = this
         if (status.submit) {
-            let {create_time, note_id, title, content, tag_id, brief, publish, origin_tag_id} = blogEditForm
+            let {create_time, note_id, title, content, tag_id, brief, publish, origin_tag_id,type,url} = blogEditForm
             if (create_time) {
                 let format_time = create_time.format('YYYY-MM-DD hh:mm:ss')
-                let data = {note_id, title, content, tag_id, brief, create_time: format_time, publish}
+                let data = {note_id, title, content, tag_id, brief, create_time: format_time, publish,type,url}
                 status.loading = true
                 let func = 'addBlog'
                 if (id) {

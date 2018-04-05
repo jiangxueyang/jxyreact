@@ -120,7 +120,7 @@ export default class extends Component {
                 <div className="record container">
                     共有{total}条记录
                     <Button type='primary' className='fr' onClick={this.triggerUp}>上传图片</Button>
-                    <input type="file" name="source" accept="image/gif, image/jpeg,image/jpg,image/png,image/svg"
+                    <input type="file" name="source" accept="image/gif, image/jpeg,image/jpg,image/png,image/svg,image/vnd.microsoft.icon"
                            onChange={this.addFile} id="addFile"/>
                 </div>
                 <Table columns={this.columns} dataSource={data} pagination={false} loading={Blog.loading}></Table>
@@ -131,3 +131,4 @@ export default class extends Component {
         )
     }
 }
+

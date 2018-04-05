@@ -9,8 +9,9 @@ import Foot from './comp/foot'
 @withRouter @inject('Auth') @observer
 export default class extends Component {
     checkAuth = async () => {
-        let uid = this.props.Auth.uid
-        ! uid && await this.props.Auth.getAuth()
+        let {Auth} = this.props;
+        let uid = Auth.uid;
+        !uid && await Auth.getAuth()
         
     }
     
@@ -18,7 +19,7 @@ export default class extends Component {
         this.checkAuth()
         this.props.history.listen((location,action)=>{
             window.scrollTo(0,0)
-            this.checkAuth()
+            this.checkAuth();
             
         })
         

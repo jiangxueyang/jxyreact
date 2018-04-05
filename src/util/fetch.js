@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {message} from 'antd';
 import loading from '@/util/loading'
-
+import store from 'store';
 // 创建axios实例
 const service = axios.create({
     baseURL: process.env.baseUrl,		// api的base_url
@@ -12,7 +12,13 @@ const service = axios.create({
 
 // request拦截器
 service.interceptors.request.use(config => {
-    let data = config.data || {},params = config.data || {};
+    let data = config.data || {},params = config.params || {};
+    let loginedtoken = store.get('loginedtoken');
+    let time = Date.now();
+    let {headers} = config;
+    headers = {...headers,loginedtoken};
+    params = {...params,_:time};
+    config = {...config,params,headers};
     if(data.loading !== false && params.loading !== false){
         loading.init();
     }

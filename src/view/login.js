@@ -15,8 +15,6 @@ class Login extends Component {
         await Auth.login()
         let referrer = Url.get('url') || '/'
         window.location.replace(referrer)
-        
-        
     }
     
     change = (e) => {

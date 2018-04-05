@@ -1,6 +1,8 @@
 import {observable, action} from 'mobx'
 import * as api from '@/api';
 import Form from './decorator/form'
+import store from 'store';
+
 @Form
 class UserAuthStore {
     @observable uid = ''
@@ -16,8 +18,10 @@ class UserAuthStore {
     @action
     async getAuth () {
         this.loading = true;
-        let res = await api.auth();
-        this.uid = res.uid;
+        let res = await api.auth().catch(e=>{
+            console.log(e,'e')
+        });
+        this.uid = res ?res.uid : '';
         this.loading = false;
     }
     
@@ -28,14 +32,15 @@ class UserAuthStore {
         let res = await api.login(loginForm).finally(_=>{
             this.loginStatus.loading = false;
         });
-        this.uid = res.uid;
+        let {token} = res;
+        store.set('loginedtoken',token);
         
     }
     
     @action
     async logout(){
         await api.logout();
-        this.uid = '';
+        store.remove('loginedtoken');
         window.location.replace('/login');
     }
     

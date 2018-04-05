@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component,Fragment} from 'react';
 import {withRouter} from 'react-router-dom'
 import {Button, Input, Row, Col, DatePicker, Select, Radio,message} from 'antd'
 import {inject, observer} from 'mobx-react'
@@ -16,7 +16,6 @@ class Edit extends Component {
     }
     changeInput = (e) => {
         let target = e.target
-        
         let {name: key, value} = target
         this.changeForm(key, value)
         
@@ -59,7 +58,9 @@ class Edit extends Component {
             message.success(`${blog_id?'修改':'添加'}成功！`)
             this.clearAll()
             id = id || blog_id
-            this.props.history.replace(`/blog/detail/${id}`)
+            let {type} = Blog
+            let url = type === 0?`/blog/detail/${id}`:'/'
+            this.props.history.replace(url)
         }
     }
     
@@ -78,6 +79,7 @@ class Edit extends Component {
         let {Blog} = this.props, {state} = this
         let {blogEditForm, allNoteInfo, tagList, blogEditStatus: status} = Blog, {TextArea} = Input, {errInfo} = state
         let {list: noteList} = allNoteInfo
+        let {content,url,type} = blogEditForm
         return (
             <div id='edit'>
                 <form>
@@ -142,21 +144,49 @@ class Edit extends Component {
                         </Col>
                     </Row>
                     <Row gutter={20}>
-                        <Col span={4} className='tr required label'>内容</Col>
-                        <Col span={4}>
-                            <Button type='primary' onClick={this.emitInput}>上传文件</Button>
-                            <input type="file" name="source" onChange={this.addFile} id="addFile"/>
-                        </Col>
-                        <Col span={4} className='error'>{errInfo.content}</Col>
-                    </Row>
-                    <Row gutter={20}>
-                        <Col span={4}></Col>
-                        <Col span={18}>
-                            <TextArea name='content' className='blogContent' value={blogEditForm.content}
-                                      placeholder='请输入内容' onChange={this.changeInput}
-                                      onBlur={this.changeInput}></TextArea>
+                        <Col span={4} className='tr required label'>博客类型</Col>
+                        <Col span={20}>
+                            <RadioGroup name='type' onChange={this.changeInput} value={type}>
+                                <Radio value={1}>链接</Radio>
+                                <Radio value={0}>原创文章</Radio>
+                            </RadioGroup>
                         </Col>
                     </Row>
+                    {
+                        type === 0 && (
+                            <Fragment>
+                                <Row gutter={20}>
+                                    <Col span={4} className='tr required label'>内容</Col>
+                                    <Col span={4}>
+                                        <Button type='primary' onClick={this.emitInput}>上传文件</Button>
+                                        <input type="file" name="source" onChange={this.addFile} id="addFile"/>
+                                    </Col>
+                                    <Col span={4} className='error'>{errInfo.content}</Col>
+                                </Row>
+                                <Row gutter={20}>
+                                    <Col span={4}></Col>
+                                    <Col span={18}>
+                                        <TextArea name='content' className='blogContent' value={content}
+                                        placeholder='请输入内容' onChange={this.changeInput}
+                                        onBlur={this.changeInput}></TextArea>
+                                    </Col>
+                                </Row>
+                            </Fragment>
+                        )
+                    }
+                    {
+                        type === 1 && (
+                            <Fragment>
+                                <Row gutter={20}>
+                                    <Col span={4} className='tr required label'>链接</Col>
+                                    <Col span={12}><Input name='url' placeholder='请输入链接' value={url}
+                                                          onChange={this.changeInput} onBlur={this.changeInput}/></Col>
+                                    <Col span={4} className='error'>{errInfo.url}</Col>
+                                </Row>
+                            </Fragment>
+                        )
+                    }
+                   
                 </form>
                 <div className="box tc">
                     <Button onClick={this.clearAll} className='mlr-10'>清空</Button>
