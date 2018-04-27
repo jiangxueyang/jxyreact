@@ -1,7 +1,7 @@
 
 
 
-A frontend project building width react,react-router and mobx.
+A frontend project building with react,react-router and mobx.
 
 git clone this project and install 
 ```
